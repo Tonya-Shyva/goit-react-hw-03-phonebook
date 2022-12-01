@@ -14,6 +14,22 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const localStorageContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(localStorageContacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prewProps, prewState) {
+    const { contacts } = this.state;
+    if (contacts !== prewState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -54,16 +70,14 @@ export class App extends Component {
   };
 
   render() {
+    const { filter } = this.state;
     return (
       <AppContainer>
         <Title>Phonebook</Title>
         <ContactForm onFormSubmit={this.addNewContact}></ContactForm>
 
         <Title as="h2">Contacts</Title>
-        <Filter
-          filter={this.state.filter}
-          handleChange={this.handleChange}
-        ></Filter>
+        <Filter filter={filter} handleChange={this.handleChange}></Filter>
         <Contacts
           contacts={this.getFilteredContacts()}
           handleDelete={this.handleDelete}
