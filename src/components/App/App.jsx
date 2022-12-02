@@ -1,16 +1,17 @@
 import { nanoid } from 'nanoid';
-
 import { Component } from 'react';
+
+import PropTypes from 'prop-types';
 import { ContactForm } from '../ContactForm/ContactForm';
 import { Contacts } from 'components/ContactList/ContactList';
 import { AppContainer, Title } from './App.styled';
 import { Filter } from 'components/Filter/Filter';
 
-import initialContacts from '../initialContacts.json';
-
 export class App extends Component {
+  static defaultProps = { initialContacts: [] };
+
   state = {
-    contacts: initialContacts,
+    contacts: this.props.initialContacts,
     filter: '',
   };
 
@@ -70,7 +71,7 @@ export class App extends Component {
   };
 
   render() {
-    const { filter } = this.state;
+    const { filter, contacts } = this.state;
     return (
       <AppContainer>
         <Title>Phonebook</Title>
@@ -78,11 +79,24 @@ export class App extends Component {
 
         <Title as="h2">Contacts</Title>
         <Filter filter={filter} handleChange={this.handleChange}></Filter>
-        <Contacts
-          contacts={this.getFilteredContacts()}
-          handleDelete={this.handleDelete}
-        ></Contacts>
+        {/* рендерим список контактів, якщо в ньому контакти є*/}
+        {contacts.length > 0 && (
+          <Contacts
+            contacts={this.getFilteredContacts()}
+            handleDelete={this.handleDelete}
+          ></Contacts>
+        )}
       </AppContainer>
     );
   }
 }
+
+App.propTypes = {
+  initialContacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
+};
