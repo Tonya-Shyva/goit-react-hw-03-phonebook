@@ -8,8 +8,6 @@ import { AppContainer, Title } from './App.styled';
 import { Filter } from 'components/Filter/Filter';
 
 export class App extends Component {
-  static defaultProps = { initialContacts: [] };
-
   state = {
     contacts: this.props.initialContacts,
     filter: '',
