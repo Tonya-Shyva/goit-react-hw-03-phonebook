@@ -8,9 +8,9 @@ import { AppContainer, Title } from './App.styled';
 import { Filter } from 'components/Filter/Filter';
 
 export class App extends Component {
-  static defaultProps = {
-    initialContacts: [],
-  };
+  // static defaultProps = {
+  //   initialContacts: [],
+  // };
 
   state = {
     contacts: [],
@@ -20,13 +20,11 @@ export class App extends Component {
   componentDidMount() {
     const localStorageContacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(localStorageContacts);
-
     // якщо користувач зайшов на сайт перший раз, то перевіряємо, чи є щось у локалі за нвшим ключем. Якщо є - то записуємо те значення, якщо немає, то ставимо дефолтні значення
     if (localStorageContacts !== null) {
-      this.setState({ contacts: parsedContacts });
-    } else {
-      this.setState({ contacts: this.props.initialContacts });
+      return this.setState({ contacts: parsedContacts });
     }
+    // this.setState({ contacts: this.props.initialContacts });
   }
 
   componentDidUpdate(_, prewState) {
